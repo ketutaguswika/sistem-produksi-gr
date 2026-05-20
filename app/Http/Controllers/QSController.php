@@ -1,6 +1,5 @@
 <?php
 
-// File: app/Http/Controllers/QSController.php
 namespace App\Http\Controllers;
 
 use App\Models\Material;
@@ -11,9 +10,31 @@ class QSController extends Controller
 {
     public function index()
     {
+        $materials = Material::all();
+        
+        // 1. Total Valuasi Aset
+        $totalValue = $materials->sum(fn($m) => $m->stok_saat_ini * $m->harga_satuan);
+        
+        // 2. Rata-rata Harga Satuan
+        $avgPrice = $materials->avg('harga_satuan');
+
+        // 3. Analisis Pareto (Top 5 High Value Items)
+        $highValueItems = $materials->map(function($m) {
+            return [
+                'nama' => $m->nama_material,
+                'total_nilai' => $m->stok_saat_ini * $m->harga_satuan
+            ];
+        })->sortByDesc('total_nilai')->take(5)->values(); // .values() biar index-nya rapi
+
         return Inertia::render('QS/Dashboard', [
-            'materials' => Material::all(),
-            'total_aset' => Material::sum(\DB::raw('stok * harga_satuan'))
+            'materials' => $materials,
+            'stats' => [
+                'total_value' => $totalValue,
+                'total_items' => $materials->count(),
+                'avg_price'   => $avgPrice, // Data ini yang kurang di kodenya
+                'low_stock'   => Material::whereColumn('stok_saat_ini', '<=', 'stok_minimal')->count()
+            ],
+            'high_value_items' => $highValueItems // Data ini yang kurang di kodenya
         ]);
     }
 
@@ -30,6 +51,6 @@ class QSController extends Controller
             'stok_minimal' => $request->stok_minimal
         ]);
 
-        return redirect()->back()->with('success', 'Harga master berhasil diperbarui');
+        return redirect()->back()->with('success', 'Harga/Data material diperbarui');
     }
 }

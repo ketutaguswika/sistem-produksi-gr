@@ -25,8 +25,15 @@ export default function Register() {
             <Head title="Register" />
 
             <div className="text-center mb-8">
+                <div className="flex justify-center mb-4">
+                    <img src="/images/logo.png" alt="Green-Resort" className="h-12 w-auto" />
+                </div>
+                <p className="text-gray-500 text-sm mt-1 leading-relaxed">Register Page</p>
+            </div>
+
+            <div className="text-center mb-8">
                 <h2 className="text-2xl font-black text-gray-900 tracking-tight uppercase">Create Account</h2>
-                <p className="text-gray-500 text-sm mt-1"></p>
+                <p className="text-gray-500 text-sm mt-1">Fill in the form below to create your account</p>
             </div>
 
             <form onSubmit={submit} className="space-y-5">

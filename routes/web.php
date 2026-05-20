@@ -34,7 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Inventory System (Log Stok & CRUD Material)
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
     // Ubah baris ini:
-Route::post('/inventory/store', [InventoryController::class, 'storeMutation'])->name('inventory.store-mutation');
+    Route::post('/inventory/store', [InventoryController::class, 'storeMutation'])->name('inventory.store-mutation');
     Route::post('/inventory/material', [InventoryController::class, 'storeMaterial'])->name('inventory.store-material');
     Route::patch('/inventory/material/{id}', [InventoryController::class, 'updateMaterial'])->name('inventory.material.update');
     Route::delete('/inventory/material/{id}', [InventoryController::class, 'destroyMaterial'])->name('inventory.material.destroy');
